@@ -1,8 +1,8 @@
 fx_version 'cerulean'
 game 'gta5'
 
-author 'Senin Adın'
-description 'QB-Core ve qb-target kullanarak NPC ile ışınlanma scripti'
+author 'dex1n9'
+description 'DEX_ELVATOR'
 version '1.0.0'
 
 client_scripts {
