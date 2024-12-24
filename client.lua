@@ -6,20 +6,16 @@ local targetCoords1 = vector3(754.28, -247.65, 66.11)
 local npcCoords2 = vector4(753.56, -247.17, 66.11, 337.58)
 local targetCoords2 = vector3(334.56, -207.57, 54.09)
 
--- NPC Model
 local npcModel = `a_f_m_fatbla_01`
 
--- Cooldown tracking
 local teleportCooldown = {}
 
--- Thread to spawn the NPCs
 CreateThread(function()
     RequestModel(npcModel)
     while not HasModelLoaded(npcModel) do
         Wait(10)
     end
 
-    -- First NPC
     local npc1 = CreatePed(0, npcModel, npcCoords1.x, npcCoords1.y, npcCoords1.z - 1, npcCoords1.w, false, false)
     SetEntityInvincible(npc1, true)
     FreezeEntityPosition(npc1, true)
@@ -36,7 +32,6 @@ CreateThread(function()
         distance = 2.5,
     })
 
-    -- Second NPC
     local npc2 = CreatePed(0, npcModel, npcCoords2.x, npcCoords2.y, npcCoords2.z - 1, npcCoords2.w, false, false)
     SetEntityInvincible(npc2, true)
     FreezeEntityPosition(npc2, true)
@@ -54,7 +49,6 @@ CreateThread(function()
     })
 end)
 
--- Helper function to check cooldown
 local function isOnCooldown(playerId, event)
     if teleportCooldown[playerId] and teleportCooldown[playerId][event] then
         return GetGameTimer() < teleportCooldown[playerId][event]
@@ -69,7 +63,6 @@ local function setCooldown(playerId, event, duration)
     teleportCooldown[playerId][event] = GetGameTimer() + duration
 end
 
--- Event for first teleportation
 RegisterNetEvent("custom:goToFootballField", function()
     local playerId = PlayerPedId()
     local eventName = "custom:goToFootballField"
@@ -79,15 +72,12 @@ RegisterNetEvent("custom:goToFootballField", function()
         return
     end
 
-    -- Teleport player instantly
     SetEntityCoords(playerId, targetCoords1.x, targetCoords1.y, targetCoords1.z)
     --QBCore.Functions.Notify("Futbol sahasına ışınlandın!", "success")
 
-    -- Set cooldown
     setCooldown(playerId, eventName, 0) -- 30 seconds
 end)
 
--- Event for second teleportation
 RegisterNetEvent("custom:goToMainField", function()
     local playerId = PlayerPedId()
     local eventName = "custom:goToMainField"
@@ -97,10 +87,8 @@ RegisterNetEvent("custom:goToMainField", function()
         return
     end
 
-    -- Teleport player instantly
     SetEntityCoords(playerId, targetCoords2.x, targetCoords2.y, targetCoords2.z)
     --QBCore.Functions.Notify("Ana sahaya ışınlandın!", "success")
 
-    -- Set cooldown
     setCooldown(playerId, eventName, 30000) -- 30 seconds
 end)
